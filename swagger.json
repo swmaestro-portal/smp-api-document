@@ -9,36 +9,46 @@
     "schemes": [
         "http"
     ],
-    "basePath": "/a",
+    "basePath": "/",
     "consumes": [
-        "application/x-www-form-urlencoded"
+        "application/json"
     ],
     "produces": [
         "application/json"
     ],
     "parameters": {
+        "UserBody": {
+            "name": "user",
+            "in": "body",
+            "schema": {
+                "$ref": "#/definitions/User"
+            }
+        },
+        "LectureBody": {
+            "name": "lecture",
+            "in": "body",
+            "schema": {
+                "$ref": "#/definitions/Lecture"
+            }
+        },
+        "AssignmentBody": {
+            "name": "assignment",
+            "in": "body",
+            "schema": {
+                "$ref": "#/definitions/Assignment"
+            }
+        },
+        "CommentBody": {
+            "name": "comment",
+            "in": "body",
+            "schema": {
+                "$ref": "#/definitions/Comment"
+            }
+        },
         "UserEmailQuery": {
             "name": "user_email",
             "in": "query",
-            "description": "User's eamil to filter",
-            "type": "string"
-        },
-        "UserEmailFormData": {
-            "name": "user_email",
-            "in": "formData",
-            "description": "User's eamil",
-            "type": "string"
-        },
-        "UserNameFormData": {
-            "name": "user_name",
-            "in": "formData",
-            "description": "User's name",
-            "type": "string"
-        },
-        "UserPasswordFormData": {
-            "name": "user_password",
-            "in": "formData",
-            "description": "User's password",
+            "description": "User's email to filter",
             "type": "string"
         }
     },
@@ -59,29 +69,14 @@
                 "description": "Creates a new user (Sign Up).",
                 "summary": "Create User",
                 "operationId": "postUser",
-                "consumes": [
-                    "application/x-www-form-urlencoded"
-                ],
                 "parameters": [
                     {
-                        "$ref": "#/parameters/UserEmailFormData"
-                    },
-                    {
-                        "$ref": "#/parameters/UserNameFormData"
-                    },
-                    {
-                        "$ref": "#/parameters/UserPasswordFormData"
+                        "$ref": "#/parameters/UserBody"
                     }
                 ],
                 "responses": {
                     "200": {
                         "$ref": "#/responses/BasicSucceed"
-                    },
-                    "400": {
-                        "$ref": "#/responses/BasicBadRequest"
-                    },
-                    "409": {
-                        "$ref": "#/responses/BasicConflict"
                     }
                 }
             },
@@ -89,11 +84,6 @@
                 "description": "Returns list of users.",
                 "summary": "Users List",
                 "operationId": "getUsers",
-                "parameters": [
-                    {
-                        "$ref": "#/parameters/UserEmailQuery"
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "Users List",
@@ -139,10 +129,7 @@
                 "operationId": "putMe",
                 "parameters": [
                     {
-                        "$ref": "#/parameters/UserNameFormData"
-                    },
-                    {
-                        "$ref": "#/parameters/UserPasswordFormData"
+                        "$ref": "#/parameters/UserBody"
                     }
                 ],
                 "responses": {
@@ -197,10 +184,7 @@
                 "operationId": "putUser",
                 "parameters": [
                     {
-                        "$ref": "#/parameters/UserNameFormData"
-                    },
-                    {
-                        "$ref": "#/parameters/UserPasswordFormData"
+                        "$ref": "#/parameters/UserBody"
                     }
                 ],
                 "responses": {
@@ -245,9 +229,14 @@
         },
         "/lectures": {
             "post": {
-                "description": "Creates a Lecture.",
-                "summary": "Create Lecture",
+                "description": "Creates a lecture.",
+                "summary": "Create lecture",
                 "operationId": "postLecture",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/LectureBody"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "$ref": "#/responses/BasicSucceed"
@@ -268,7 +257,13 @@
                 "operationId": "getLectures",
                 "responses": {
                     "200": {
-                        "$ref": "#/responses/BasicSucceed"
+                        "description": "Lectures List",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Lecture"
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -285,7 +280,10 @@
                 "operationId": "getLecture",
                 "responses": {
                     "200": {
-                        "$ref": "#/responses/BasicSucceed"
+                        "description": "Lecture Information",
+                        "schema": {
+                            "$ref": "#/definitions/Lecture"
+                        }
                     }
                 },
                 "security": [
@@ -298,6 +296,11 @@
                 "description": "Edit a Lecture",
                 "summary": "Edit Lecture",
                 "operationId": "putLecture",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/LectureBody"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "$ref": "#/responses/BasicSucceed"
@@ -307,7 +310,7 @@
                     {
                         "smp_auth": [
                             "mentor",
-                            "mentee"
+                            "manager"
                         ]
                     }
                 ]
@@ -325,7 +328,7 @@
                     {
                         "smp_auth": [
                             "mentor",
-                            "mentee"
+                            "manager"
                         ]
                     }
                 ]
@@ -345,6 +348,11 @@
                 "description": "Creates a comment on lecture.",
                 "summary": "Create Comment on Lecture",
                 "operationId": "postCommentOfLecture",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/CommentBody"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "$ref": "#/responses/BasicSucceed"
@@ -362,7 +370,13 @@
                 "operationId": "getCommentsOfLecture",
                 "responses": {
                     "200": {
-                        "$ref": "#/responses/BasicSucceed"
+                        "description": "Lectures List",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Comment"
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -422,11 +436,132 @@
                 }
             ]
         },
-        "/comments/{comment-id}": {
+        "/assignments": {
+            "post": {
+                "description": "Creates a assignment.",
+                "summary": "Create assignment",
+                "operationId": "postAssignment",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/AssignmentBody"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/BasicSucceed"
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": [
+                            "mentor",
+                            "manager"
+                        ]
+                    }
+                ]
+            },
             "get": {
-                "description": "Returns a comment.",
-                "summary": "Get Comment",
-                "operationId": "getComment",
+                "description": "Return assignments list.",
+                "summary": "Assignment List",
+                "operationId": "getAssignments",
+                "responses": {
+                    "200": {
+                        "description": "Assignments List",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Assignment"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": []
+                    }
+                ]
+            }
+        },
+        "/assignments/{assignment-id}": {
+            "get": {
+                "description": "Returns a Assignment.",
+                "summary": "Get Assignment",
+                "operationId": "getAssignment",
+                "responses": {
+                    "200": {
+                        "description": "Assignment Information",
+                        "schema": {
+                            "$ref": "#/definitions/Assignment"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": []
+                    }
+                ]
+            },
+            "put": {
+                "description": "Edit a Assignment",
+                "summary": "Edit Assignment",
+                "operationId": "putAssignment",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/AssignmentBody"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/BasicSucceed"
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": [
+                            "mentor",
+                            "manager"
+                        ]
+                    }
+                ]
+            },
+            "delete": {
+                "description": "Delete a Assignment",
+                "summary": "Delete Assignment",
+                "operationId": "deleteAssignment",
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/BasicSucceed"
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": [
+                            "mentor",
+                            "manager"
+                        ]
+                    }
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "assignment-id",
+                    "in": "path",
+                    "description": "Assignment's ID",
+                    "required": true,
+                    "type": "integer"
+                }
+            ]
+        },
+        "/assignments/{assignment-id}/comments": {
+            "post": {
+                "description": "Creates a comment on assignment.",
+                "summary": "Create Comment on Assignment",
+                "operationId": "postCommentOfAssignment",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/CommentBody"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "$ref": "#/responses/BasicSucceed"
@@ -438,10 +573,88 @@
                     }
                 ]
             },
+            "get": {
+                "description": "Return comments list of assignment.",
+                "summary": "List Comments of assignment",
+                "operationId": "getCommentsOfAssignment",
+                "responses": {
+                    "200": {
+                        "description": "Assignments List",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Comment"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": []
+                    }
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "assignment-id",
+                    "in": "path",
+                    "description": "Assignment's ID",
+                    "required": true,
+                    "type": "integer"
+                }
+            ]
+        },
+        "/assignments/{assignment-id}/attachments": {
+            "post": {
+                "description": "Uploads a attachment on assignment.",
+                "summary": "Upload attachment on Assignment",
+                "operationId": "postAttachmentOfAssignment",
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/BasicSucceed"
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": []
+                    }
+                ]
+            },
+            "get": {
+                "description": "Return attachments list of assignment.",
+                "summary": "List Attachments of Assignment",
+                "operationId": "getAttachmentsOfAssignment",
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/BasicSucceed"
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": []
+                    }
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "assignment-id",
+                    "in": "path",
+                    "description": "Assignment's ID",
+                    "required": true,
+                    "type": "integer"
+                }
+            ]
+        },
+        "/comments/{comment-id}": {
             "put": {
                 "description": "Edit a comment.",
                 "summary": "Edit Comment",
                 "operationId": "putComment",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/CommentBody"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "$ref": "#/responses/BasicSucceed"
@@ -477,27 +690,295 @@
                     "type": "integer"
                 }
             ]
+        },
+        "/notifications/me": {
+            "get": {
+                "description": "Return my notifications",
+                "summary": "My notification list",
+                "operationId": "getMyNotifications",
+                "responses": {
+                    "200": {
+                        "description": "Notifications List",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Notification"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": []
+                    }
+                ]
+            }
+        },
+        "/notifications/{notification-id}": {
+            "put": {
+                "description": "Read notification",
+                "summary": "Read notification",
+                "operationId": "readNotification",
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/BasicSucceed"
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": []
+                    }
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "notification-id",
+                    "in": "path",
+                    "description": "Notification's ID",
+                    "required": true,
+                    "type": "integer"
+                }
+            ]
         }
     },
     "definitions": {
         "User": {
             "type": "object",
             "required": [
-                "user_email",
-                "user_name"
+                "userEmail",
+                "userName"
             ],
             "properties": {
-                "user_id": {
+                "userId": {
                     "type": "integer",
-                    "description": "User's unique ID."
+                    "description": "Unique ID"
                 },
-                "user_email": {
+                "userEmail": {
                     "type": "string",
-                    "description": "User's email address."
+                    "description": "Email address"
                 },
-                "user_name": {
+                "userName": {
                     "type": "string",
-                    "description": "User's name."
+                    "description": "Name"
+                },
+                "userPassword": {
+                    "type": "string",
+                    "description": "Password"
+                },
+                "userGender": {
+                    "type": "string",
+                    "description": "0:Female, 1:Male"
+                },
+                "userPhone": {
+                    "type": "string",
+                    "description": "Phone number"
+                },
+                "userGroups": {
+                    "type": "array",
+                    "$ref": "#/definitions/Group"
+                }
+            }
+        },
+        "Group": {
+            "type": "object",
+            "properties": {
+                "userId": {
+                    "type": "integer",
+                    "description": "User's ID."
+                },
+                "generationId": {
+                    "type": "integer",
+                    "description": "Generation number"
+                },
+                "groupCode": {
+                    "type": "string",
+                    "description": "0:Mentee, 1:Mento, 2:Admin"
+                }
+            }
+        },
+        "Lecture": {
+            "type": "object",
+            "required": [
+                "articleGenerationId",
+                "articleSubject",
+                "articleContent",
+                "lectureTeacherId",
+                "lectureBeginAt",
+                "lectureEndAt"
+            ],
+            "properties": {
+                "articleId": {
+                    "type": "integer",
+                    "description": "Article's unique ID"
+                },
+                "articleWriterId": {
+                    "type": "integer",
+                    "description": "Article Writer user ID"
+                },
+                "articleModifierId": {
+                    "type": "integer",
+                    "description": "Article Modifier's user ID"
+                },
+                "articleGenerationId": {
+                    "type": "integer",
+                    "description": "Article's generation ID"
+                },
+                "articleSubject": {
+                    "type": "string",
+                    "description": "Article's subject"
+                },
+                "articleContent": {
+                    "type": "string",
+                    "description": "Article's content"
+                },
+                "articleCreatedAt": {
+                    "type": "string",
+                    "description": "When is article created"
+                },
+                "articleUpdatedAt": {
+                    "type": "string",
+                    "description": "When is article updated"
+                },
+                "articleType": {
+                    "type": "string",
+                    "description": "Article's Type"
+                },
+                "articleStatus": {
+                    "type": "string",
+                    "description": "Article's Status"
+                },
+                "lectureTeacherId": {
+                    "type": "integer",
+                    "description": "Lecture's teacher id"
+                },
+                "lectureBeginAt": {
+                    "type": "string",
+                    "description": "When lecture begin"
+                },
+                "lectureEndAt": {
+                    "type": "string",
+                    "description": "When lecture end"
+                }
+            }
+        },
+        "Assignment": {
+            "type": "object",
+            "required": [
+                "articleGenerationId",
+                "articleSubject",
+                "articleContent",
+                "assignmentEndAt"
+            ],
+            "properties": {
+                "articleId": {
+                    "type": "integer",
+                    "description": "Article's unique ID"
+                },
+                "articleWriterId": {
+                    "type": "integer",
+                    "description": "Article Writer user ID"
+                },
+                "articleModifierId": {
+                    "type": "integer",
+                    "description": "Article Modifier's user ID"
+                },
+                "articleGenerationId": {
+                    "type": "integer",
+                    "description": "Article's generation ID"
+                },
+                "articleSubject": {
+                    "type": "string",
+                    "description": "Article's subject"
+                },
+                "articleContent": {
+                    "type": "string",
+                    "description": "Article's content"
+                },
+                "articleCreatedAt": {
+                    "type": "string",
+                    "description": "When is article created"
+                },
+                "articleUpdatedAt": {
+                    "type": "string",
+                    "description": "When is article updated"
+                },
+                "articleType": {
+                    "type": "string",
+                    "description": "Article's Type"
+                },
+                "articleStatus": {
+                    "type": "string",
+                    "description": "Article's Status"
+                },
+                "assignmentEndAt": {
+                    "type": "string",
+                    "description": "When assignment end"
+                }
+            }
+        },
+        "Comment": {
+            "type": "object",
+            "required": [
+                "commentContent",
+                "commentParentId"
+            ],
+            "properties": {
+                "commentId": {
+                    "type": "integer",
+                    "description": "Comment's uniqud ID"
+                },
+                "commentContent": {
+                    "type": "string",
+                    "description": "Comment's content"
+                },
+                "commentWriterId": {
+                    "type": "integer",
+                    "description": "Comment writer's ID"
+                },
+                "commentParentId": {
+                    "type": "integer",
+                    "description": "Comment parent's ID"
+                },
+                "commentCreatedAt": {
+                    "type": "string",
+                    "description": "When is comment created"
+                },
+                "commentUpdatedAt": {
+                    "type": "string",
+                    "description": "When is comment created"
+                },
+                "commentStatus": {
+                    "type": "string",
+                    "description": "A available D deleted"
+                }
+            }
+        },
+        "Notification": {
+            "type": "object",
+            "properties": {
+                "notificationId": {
+                    "type": "integer",
+                    "description": "Notification's uniqud ID"
+                },
+                "notificationMessage": {
+                    "type": "string",
+                    "description": "Notification's content"
+                },
+                "notificationUrl": {
+                    "type": "string",
+                    "description": "Where is notification sent"
+                },
+                "notificationTargetUserId": {
+                    "type": "integer",
+                    "description": "Notification's target user Id"
+                },
+                "notificationCreatedAt": {
+                    "type": "string",
+                    "description": "When is comment created"
+                },
+                "notificationIsRead": {
+                    "type": "boolean",
+                    "description": "is notification Read"
                 }
             }
         },
