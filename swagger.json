@@ -1,0 +1,533 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "SW Maestro Portal API",
+        "description": "SW Maestro Portal API Document",
+        "version": "1.0.0"
+    },
+    "host": "api.swmaestro.net",
+    "schemes": [
+        "http"
+    ],
+    "basePath": "/a",
+    "consumes": [
+        "application/x-www-form-urlencoded"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "parameters": {
+        "UserEmailQuery": {
+            "name": "user_email",
+            "in": "query",
+            "description": "User's eamil to filter",
+            "type": "string"
+        },
+        "UserEmailFormData": {
+            "name": "user_email",
+            "in": "formData",
+            "description": "User's eamil",
+            "type": "string"
+        },
+        "UserNameFormData": {
+            "name": "user_name",
+            "in": "formData",
+            "description": "User's name",
+            "type": "string"
+        },
+        "UserPasswordFormData": {
+            "name": "user_password",
+            "in": "formData",
+            "description": "User's password",
+            "type": "string"
+        }
+    },
+    "responses": {
+        "BasicSucceed": {
+            "description": "Succeed."
+        },
+        "BasicBadRequest": {
+            "description": "Bad request."
+        },
+        "BasicConflict": {
+            "description": "Conflict."
+        }
+    },
+    "paths": {
+        "/users": {
+            "post": {
+                "description": "Creates a new user (Sign Up).",
+                "summary": "Create User",
+                "operationId": "postUser",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/UserEmailFormData"
+                    },
+                    {
+                        "$ref": "#/parameters/UserNameFormData"
+                    },
+                    {
+                        "$ref": "#/parameters/UserPasswordFormData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/BasicSucceed"
+                    },
+                    "400": {
+                        "$ref": "#/responses/BasicBadRequest"
+                    },
+                    "409": {
+                        "$ref": "#/responses/BasicConflict"
+                    }
+                }
+            },
+            "get": {
+                "description": "Returns list of users.",
+                "summary": "Users List",
+                "operationId": "getUsers",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/UserEmailQuery"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Users List",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/User"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": [
+                            "manager"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/users/me": {
+            "get": {
+                "description": "Returns logined user's profile.",
+                "summary": "My Profile",
+                "operationId": "getMe",
+                "responses": {
+                    "200": {
+                        "description": "User Response",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": []
+                    }
+                ]
+            },
+            "put": {
+                "description": "Edit my profile.",
+                "summary": "Edit Me",
+                "operationId": "putMe",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/UserNameFormData"
+                    },
+                    {
+                        "$ref": "#/parameters/UserPasswordFormData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/BasicSucceed"
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": []
+                    }
+                ]
+            },
+            "delete": {
+                "description": "Deletes Me (Leave).",
+                "summary": "Delete Me",
+                "operationId": "deleteMe",
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/BasicSucceed"
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": []
+                    }
+                ]
+            }
+        },
+        "/users/{user-id}": {
+            "get": {
+                "description": "Returns user's profile.",
+                "summary": "User Profile",
+                "operationId": "getUser",
+                "responses": {
+                    "200": {
+                        "description": "User Profile",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": []
+                    }
+                ]
+            },
+            "put": {
+                "description": "Edit user's profile.",
+                "summary": "Edit User",
+                "operationId": "putUser",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/UserNameFormData"
+                    },
+                    {
+                        "$ref": "#/parameters/UserPasswordFormData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/BasicSucceed"
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": [
+                            "manager"
+                        ]
+                    }
+                ]
+            },
+            "delete": {
+                "description": "Deletes a User.",
+                "summary": "Delete User",
+                "operationId": "deleteUser",
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/BasicSucceed"
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": [
+                            "manager"
+                        ]
+                    }
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "user-id",
+                    "in": "path",
+                    "description": "User's ID",
+                    "required": true,
+                    "type": "integer"
+                }
+            ]
+        },
+        "/lectures": {
+            "post": {
+                "description": "Creates a Lecture.",
+                "summary": "Create Lecture",
+                "operationId": "postLecture",
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/BasicSucceed"
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": [
+                            "mentor",
+                            "manager"
+                        ]
+                    }
+                ]
+            },
+            "get": {
+                "description": "Return lectures list.",
+                "summary": "Lecture List",
+                "operationId": "getLectures",
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/BasicSucceed"
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": []
+                    }
+                ]
+            }
+        },
+        "/lectures/{lecture-id}": {
+            "get": {
+                "description": "Returns a Lecture.",
+                "summary": "Get Lecture",
+                "operationId": "getLecture",
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/BasicSucceed"
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": []
+                    }
+                ]
+            },
+            "put": {
+                "description": "Edit a Lecture",
+                "summary": "Edit Lecture",
+                "operationId": "putLecture",
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/BasicSucceed"
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": [
+                            "mentor",
+                            "mentee"
+                        ]
+                    }
+                ]
+            },
+            "delete": {
+                "description": "Delete a Lecture",
+                "summary": "Delete Lecture",
+                "operationId": "deleteLecture",
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/BasicSucceed"
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": [
+                            "mentor",
+                            "mentee"
+                        ]
+                    }
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "lecture-id",
+                    "in": "path",
+                    "description": "Lecture's ID",
+                    "required": true,
+                    "type": "integer"
+                }
+            ]
+        },
+        "/lectures/{lecture-id}/comments": {
+            "post": {
+                "description": "Creates a comment on lecture.",
+                "summary": "Create Comment on Lecture",
+                "operationId": "postCommentOfLecture",
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/BasicSucceed"
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": []
+                    }
+                ]
+            },
+            "get": {
+                "description": "Return comments list of lecture.",
+                "summary": "List Comments of Lecture",
+                "operationId": "getCommentsOfLecture",
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/BasicSucceed"
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": []
+                    }
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "lecture-id",
+                    "in": "path",
+                    "description": "Lecture's ID",
+                    "required": true,
+                    "type": "integer"
+                }
+            ]
+        },
+        "/lectures/{lecture-id}/attachments": {
+            "post": {
+                "description": "Uploads a attachment on lecture.",
+                "summary": "Upload attachment on Lecture",
+                "operationId": "postAttachmentOfLecture",
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/BasicSucceed"
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": []
+                    }
+                ]
+            },
+            "get": {
+                "description": "Return attachments list of lecture.",
+                "summary": "List Attachments of Lecture",
+                "operationId": "getAttachmentsOfLecture",
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/BasicSucceed"
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": []
+                    }
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "lecture-id",
+                    "in": "path",
+                    "description": "Lecture's ID",
+                    "required": true,
+                    "type": "integer"
+                }
+            ]
+        },
+        "/comments/{comment-id}": {
+            "get": {
+                "description": "Returns a comment.",
+                "summary": "Get Comment",
+                "operationId": "getComment",
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/BasicSucceed"
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": []
+                    }
+                ]
+            },
+            "put": {
+                "description": "Edit a comment.",
+                "summary": "Edit Comment",
+                "operationId": "putComment",
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/BasicSucceed"
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": []
+                    }
+                ]
+            },
+            "delete": {
+                "description": "Delete a comment.",
+                "summary": "Delete Comment",
+                "operationId": "deleteComment",
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/BasicSucceed"
+                    }
+                },
+                "security": [
+                    {
+                        "smp_auth": []
+                    }
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "comment-id",
+                    "in": "path",
+                    "description": "Comment's ID",
+                    "required": true,
+                    "type": "integer"
+                }
+            ]
+        }
+    },
+    "definitions": {
+        "User": {
+            "type": "object",
+            "required": [
+                "user_email",
+                "user_name"
+            ],
+            "properties": {
+                "user_id": {
+                    "type": "integer",
+                    "description": "User's unique ID."
+                },
+                "user_email": {
+                    "type": "string",
+                    "description": "User's email address."
+                },
+                "user_name": {
+                    "type": "string",
+                    "description": "User's name."
+                }
+            }
+        },
+        "Error": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "fields": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "smp_auth": {
+            "description": "Own Auth. (* Need one of scopes as listed on request.)",
+            "type": "oauth2",
+            "tokenUrl": "http://api.swmaestro.net/oauth/token",
+            "flow": "password",
+            "scopes": {
+                "mentee": "Mentee",
+                "mentor": "Mentor",
+                "manager": "Manager"
+            }
+        }
+    }
+}
