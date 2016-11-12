@@ -11,16 +11,21 @@ host: api.swmaestro.net
 schemes:
   - http
 # will be prefixed to all paths
-basePath: /a
+basePath: /
 consumes:
-- application/x-www-form-urlencoded
+- application/json
 produces:
 - application/json
 parameters:
+  UserBody:
+    name: user
+    in: body
+    schema:
+      $ref: '#/definitions/User'
   UserEmailQuery:
     name: user_email
     in: query
-    description: User's eamil to filter
+    description: User's email to filter
     type: string
   UserEmailFormData:
     name: user_email
@@ -51,19 +56,11 @@ paths:
       description: Creates a new user (Sign Up).
       summary: Create User
       operationId: postUser
-      consumes:
-      - application/x-www-form-urlencoded
       parameters:
-      - $ref: '#/parameters/UserEmailFormData'
-      - $ref: '#/parameters/UserNameFormData'
-      - $ref: '#/parameters/UserPasswordFormData'
+      - $ref: '#/parameters/UserBody'
       responses:
         '200':
           $ref: '#/responses/BasicSucceed'
-        '400':
-          $ref: '#/responses/BasicBadRequest'
-        '409':
-          $ref: '#/responses/BasicConflict'
     get:
       description: Returns list of users.
       summary: Users List
