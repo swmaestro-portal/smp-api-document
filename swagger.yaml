@@ -27,21 +27,6 @@ parameters:
     in: query
     description: User's email to filter
     type: string
-  UserEmailFormData:
-    name: user_email
-    in: formData
-    description: User's eamil
-    type: string
-  UserNameFormData:
-    name: user_name
-    in: formData
-    description: User's name
-    type: string
-  UserPasswordFormData:
-    name: user_password
-    in: formData
-    description: User's password
-    type: string
 responses:
   BasicSucceed:
     description: Succeed.
@@ -65,8 +50,6 @@ paths:
       description: Returns list of users.
       summary: Users List
       operationId: getUsers
-      parameters:
-      - $ref: '#/parameters/UserEmailQuery'
       responses:
         '200':
           description: Users List
@@ -94,8 +77,7 @@ paths:
       summary: Edit Me
       operationId: putMe
       parameters:
-      - $ref: '#/parameters/UserNameFormData'
-      - $ref: '#/parameters/UserPasswordFormData'
+      - $ref: '#/parameters/UserBody'
       responses:
         '200':
           $ref: '#/responses/BasicSucceed'
@@ -127,8 +109,7 @@ paths:
       summary: Edit User
       operationId: putUser
       parameters:
-      - $ref: '#/parameters/UserNameFormData'
-      - $ref: '#/parameters/UserPasswordFormData'
+      - $ref: '#/parameters/UserBody'
       responses:
         '200':
           $ref: '#/responses/BasicSucceed'
@@ -321,103 +302,42 @@ definitions:
   User:
     type: object
     required:
-    - user_email
-    - user_name
+    - userEmail
+    - userName
     properties:
-      user_id:
+      userId:
         type: integer
-        description: User's unique ID.
-      user_email:
+        description: Unique ID
+      userEmail:
         type: string
-        description: User's email address.
-      user_name:
+        description: Email address
+      userName:
         type: string
-        description: User's name.
-  # Product:
-  #   type: object
-  #   properties:
-  #     product_id:
-  #       type: string
-  #       description: Unique identifier representing a specific product for a given latitude & longitude. For example, uberX in San Francisco will have a different product_id than uberX in Los Angeles.
-  #     description:
-  #       type: string
-  #       description: Description of product.
-  #     display_name:
-  #       type: string
-  #       description: Display name of product.
-  #     capacity:
-  #       type: string
-  #       description: Capacity of product. For example, 4 people.
-  #     image:
-  #       type: string
-  #       description: Image URL representing the product.
-  # PriceEstimate:
-  #   type: object
-  #   properties:
-  #     product_id:
-  #       type: string
-  #       description: Unique identifier representing a specific product for a given latitude & longitude. For example, uberX in San Francisco will have a different product_id than uberX in Los Angeles
-  #     currency_code:
-  #       type: string
-  #       description: "[ISO 4217](http://en.wikipedia.org/wiki/ISO_4217) currency code."
-  #     display_name:
-  #       type: string
-  #       description: Display name of product.
-  #     estimate:
-  #       type: string
-  #       description: formDataatted string of estimate in local currency of the start location. Estimate could be a range, a single number (flat rate) or "Metered" for TAXI.
-  #     low_estimate:
-  #       type: number
-  #       description: Lower bound of the estimated price.
-  #     high_estimate:
-  #       type: number
-  #       description: Upper bound of the estimated price.
-  #     surge_multiplier:
-  #       type: number
-  #       description: Expected surge multiplier. Surge is active if surge_multiplier is greater than 1. Price estimate already factors in the surge multiplier.
-  # Profile:
-  #   type: object
-  #   properties:
-  #     first_name:
-  #       type: string
-  #       description: First name of the Uber user.
-  #     last_name:
-  #       type: string
-  #       description: Last name of the Uber user.
-  #     email:
-  #       type: string
-  #       description: Email address of the Uber user
-  #     picture:
-  #       type: string
-  #       description: Image URL of the Uber user.
-  #     promo_code:
-  #       type: string
-  #       description: Promo code of the Uber user.
-  # Activity:
-  #   type: object
-  #   properties:
-  #     uuid:
-  #       type: string
-  #       description: Unique identifier for the activity
-  # Activities:
-  #   type: object
-  #   properties:
-  #     offset:
-  #       type: integer
-  #       formDataat: int32
-  #       description: Position in pagination.
-  #     limit:
-  #       type: integer
-  #       formDataat: int32
-  #       description: Number of items to retrieve (100 max).
-  #     count:
-  #       type: integer
-  #       formDataat: int32
-  #       description: Total number of items available.
-  #     history:
-  #       type: array
-  #       items:
-  #         $ref: '#/definitions/Activity'
+        description: Name
+      userPassword:
+        type: string
+        description: Password
+      userGender:
+        type: string
+        description: 0:Female, 1:Male
+      userPhone:
+        type: string
+        description: Phone number
+      userGroups:
+        type: array
+        $ref: '#/definitions/Group'
+  Group:
+    type: object
+    properties:
+      userId:
+        type: integer
+        description: User's ID.
+      generationId:
+        type: integer
+        description: Generation number
+      groupCode:
+        type: string
+        description: 0:Mentee, 1:Mento, 2:Admin
   Error:
     type: object
     properties:
